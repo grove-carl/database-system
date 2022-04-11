@@ -40,4 +40,13 @@ class SyntaxCheckerTest {
         assertFalse(result);
     }
 
+    @Test
+    void should_return_false_when_create_table_given_table_name_is_missing() {
+        String statement = "create table (id Integer);";
+
+        boolean result = syntaxChecker.isValid(statement);
+
+        assertFalse(result);
+    }
+
 }

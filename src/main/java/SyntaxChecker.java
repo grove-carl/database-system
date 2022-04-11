@@ -9,8 +9,18 @@ public class SyntaxChecker {
     private static final int MINIMAL_LENGTH_OF_COLUMN_PARAMS = 2;
 
     public boolean isValid(String statement) {
+        String tableName = extractTableNameFromCreateTableStatement(statement);
+        if (tableName.isEmpty()) {
+            return false;
+        }
         List<String> columnParams = extractColumnParamsFromCreateTableStatement(statement);
         return columnParams.size() >= MINIMAL_LENGTH_OF_COLUMN_PARAMS;
+    }
+
+    private String extractTableNameFromCreateTableStatement(String statement) {
+        int indexOfTailOfCreateTableStatement = "create table".length();
+        int indexOfHeadOfColumnParam = statement.indexOf(OPEN_PARENTHESIS);
+        return statement.substring(indexOfTailOfCreateTableStatement, indexOfHeadOfColumnParam).trim();
     }
 
     private List<String> extractColumnParamsFromCreateTableStatement(String statement) {
