@@ -49,4 +49,13 @@ class SyntaxCheckerTest {
         assertFalse(result);
     }
 
+    @Test
+    void should_return_true_when_create_table_given_multiple_columns_are_inputted() {
+        String statement = "create table user (id Integer, username String, password String);";
+
+        boolean result = syntaxChecker.isValid(statement);
+
+        assertTrue(result);
+    }
+
 }
