@@ -54,6 +54,20 @@ class SyntaxCheckerTest {
         assertValidationOfStatement(statement, expectedResult);
     }
 
+    @Test
+    void should_return_false_when_create_table_given_multiple_columns_are_inputted_and_first_column_definition_is_missing() {
+        String statement = "create table user (id, username String, password String);";
+        boolean expectedResult = false;
+        assertValidationOfStatement(statement, expectedResult);
+    }
+
+    @Test
+    void should_return_false_when_create_table_given_multiple_columns_are_inputted_and_multiple_column_name_or_definition_is_missing() {
+        String statement = "create table user (id, username String, String);";
+        boolean expectedResult = false;
+        assertValidationOfStatement(statement, expectedResult);
+    }
+
     private void assertValidationOfStatement(String statement, boolean expectedResult) {
         boolean result = syntaxChecker.isValid(statement);
         assertEquals(expectedResult, result);
