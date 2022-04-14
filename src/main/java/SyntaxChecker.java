@@ -15,7 +15,7 @@ public class SyntaxChecker {
         if (tableName.isEmpty()) {
             return false;
         }
-        List<ColumnDefinition> columnDefinitions = extractColumnParamsFromCreateTableStatement(statement);
+        List<ColumnDefinition> columnDefinitions = getColumnDefinitions(statement);
         return !columnDefinitions.isEmpty();
     }
 
@@ -25,20 +25,33 @@ public class SyntaxChecker {
         return statement.substring(indexOfTailOfCreateTableStatement, indexOfHeadOfColumnParam).trim();
     }
 
-    private List<ColumnDefinition> extractColumnParamsFromCreateTableStatement(String statement) {
+    private List<ColumnDefinition> getColumnDefinitions(String statement) {
+        String[] textualColumnDefinitions = extractTextualColumnDefinitionWithinParenthesis(statement);
+        return mapTextualColumnDefinitionsToObjects(textualColumnDefinitions);
+    }
+
+    private String[] extractTextualColumnDefinitionWithinParenthesis(String statement) {
         int indexOfOpenParenthesis = statement.indexOf(OPEN_PARENTHESIS);
         int indexOfCloseParenthesis = statement.indexOf(CLOSE_PARENTHESIS);
         String contentWithinParenthesis = statement.substring(indexOfOpenParenthesis + 1, indexOfCloseParenthesis);
-        String[] originColumnDefinitions = contentWithinParenthesis.trim().split(COLUMN_DEFINITION_SPLIT);
+        return contentWithinParenthesis.trim().split(COLUMN_DEFINITION_SPLIT);
+    }
 
+    private List<ColumnDefinition> mapTextualColumnDefinitionsToObjects(String[] textualColumnDefinitions) {
         List<ColumnDefinition> columnDefinitions = new ArrayList<>();
-        for (String originColumnDefinition : originColumnDefinitions) {
+        for (String originColumnDefinition : textualColumnDefinitions) {
             String[] singleColumnDefinition = originColumnDefinition.trim().split(COLUMN_PARAMS_SPLIT);
-            if (singleColumnDefinition.length != 2) {
+            if (columnDefinitionIsNotValid(singleColumnDefinition)) {
                 return Collections.emptyList();
             }
-            columnDefinitions.add(ColumnDefinition.builder().columnName(singleColumnDefinition[0]).columnType(singleColumnDefinition[1]).build());
+            columnDefinitions.add(ColumnDefinition.builder()
+                    .columnName(singleColumnDefinition[0])
+                    .columnType(singleColumnDefinition[1]).build());
         }
         return columnDefinitions;
+    }
+
+    private boolean columnDefinitionIsNotValid(String[] columnDefinition) {
+        return columnDefinition.length != 2;
     }
 }
