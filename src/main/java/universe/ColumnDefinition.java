@@ -1,3 +1,5 @@
+package universe;
+
 import lombok.Builder;
 import lombok.Data;
 
