@@ -1,6 +1,7 @@
 package universe;
 
 import java.util.List;
+import universe.config.ValidColumnTypes;
 import universe.util.CreateTableStatementUtils;
 
 public class SyntaxChecker {
@@ -17,7 +18,13 @@ public class SyntaxChecker {
     }
 
     private boolean checkValidationOfColumnDefinitions(List<ColumnDefinition> columnDefinitions) {
-        return false;
+        List<String> validColumnTypes = ValidColumnTypes.get();
+        for (ColumnDefinition columnDefinition : columnDefinitions) {
+            if (!validColumnTypes.contains(columnDefinition.getColumnType())) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
