@@ -69,6 +69,13 @@ class SyntaxCheckerTest {
         assertValidationOfStatement(statement, expectedResult);
     }
 
+    @Test
+    void should_return_false_when_create_table_given_column_type_is_not_valid() {
+        String statement = "create table user (id Integer, username Str);";
+        boolean expectedResult = false;
+        assertValidationOfStatement(statement, expectedResult);
+    }
+
     private void assertValidationOfStatement(String statement, boolean expectedResult) {
         boolean result = syntaxChecker.isValid(statement);
         assertEquals(expectedResult, result);

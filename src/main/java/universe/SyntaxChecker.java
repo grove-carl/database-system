@@ -12,7 +12,12 @@ public class SyntaxChecker {
         }
         List<ColumnDefinition> columnDefinitions =
                 CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
-        return !columnDefinitions.isEmpty();
+        boolean isValid = checkValidationOfColumnDefinitions(columnDefinitions);
+        return isValid && !columnDefinitions.isEmpty();
+    }
+
+    private boolean checkValidationOfColumnDefinitions(List<ColumnDefinition> columnDefinitions) {
+        return false;
     }
 
 }
