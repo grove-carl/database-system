@@ -1,7 +1,6 @@
 package universe;
 
 import java.util.List;
-import universe.util.CreateTableStatementUtils;
 
 public class QueryExecutionEngine {
 
@@ -11,14 +10,7 @@ public class QueryExecutionEngine {
         this.database = DatabaseFactory.getDatabase();
     }
 
-    public void execute(String statement) {
-        executeCreateTableStatement(statement);
-    }
-
-    private void executeCreateTableStatement(String statement) {
-        String tableName = CreateTableStatementUtils.extractTableNameFromCreateTableStatement(statement);
-        List<ColumnDefinition> columnDefinitions = CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
+    public void execute(String tableName, List<ColumnDefinition> columnDefinitions) {
         database.createTable(tableName, columnDefinitions);
     }
-
 }
