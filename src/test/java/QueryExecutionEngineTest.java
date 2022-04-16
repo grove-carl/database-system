@@ -21,10 +21,10 @@ class QueryExecutionEngineTest {
     @Test
     void should_create_table_when_execute_create_table_statement_given_single_column_is_defined() {
         String tableName = "user";
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>();
         String columnName = "id";
         String columnType = "Integer";
-        columnDefinitions.add(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
+        List<ColumnDefinition> columnDefinitions =
+                List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
 
         QueryExecutionEngine queryExecutionEngine = new QueryExecutionEngine();
         queryExecutionEngine.execute(tableName, columnDefinitions);
