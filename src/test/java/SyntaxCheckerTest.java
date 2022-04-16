@@ -1,5 +1,10 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import universe.ColumnDefinition;
+import universe.Database;
+import universe.DatabaseFactory;
 import universe.SyntaxChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,9 +13,16 @@ class SyntaxCheckerTest {
 
     private SyntaxChecker syntaxChecker;
 
+    private final Database database = DatabaseFactory.getDatabase();
+
     @BeforeEach
     void setUp() {
         syntaxChecker = new SyntaxChecker();
+    }
+
+    @AfterEach
+    void tearDown() {
+        database.deleteAllTables();
     }
 
     @Test
@@ -72,6 +84,19 @@ class SyntaxCheckerTest {
     @Test
     void should_return_false_when_create_table_given_column_type_is_not_valid() {
         String statement = "create table user (id Integer, username Str);";
+        boolean expectedResult = false;
+        assertValidationOfStatement(statement, expectedResult);
+    }
+
+    @Test
+    void should_return_false_when_create_table_given_table_name_has_already_exist() {
+        String tableName = "user";
+        List<ColumnDefinition> columnDefinitions =
+                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+        Database database = DatabaseFactory.getDatabase();
+        database.createTable(tableName, columnDefinitions);
+
+        String statement = "create table user (id Integer);";
         boolean expectedResult = false;
         assertValidationOfStatement(statement, expectedResult);
     }

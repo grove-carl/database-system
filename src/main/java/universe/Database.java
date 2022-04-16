@@ -23,4 +23,8 @@ public class Database {
         tables.put(tableName, table);
     }
 
+    public void deleteAllTables() {
+        tables.clear();
+    }
+
 }
