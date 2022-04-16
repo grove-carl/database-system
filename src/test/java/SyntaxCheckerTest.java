@@ -101,6 +101,13 @@ class SyntaxCheckerTest {
         assertValidationOfStatement(statement, expectedResult);
     }
 
+    @Test
+    void should_return_false_when_create_table_given_column_name_has_already_exist() {
+        String statement = "create table user (id Integer, username String, username String);";
+        boolean expectedResult = false;
+        assertValidationOfStatement(statement, expectedResult);
+    }
+
     private void assertValidationOfStatement(String statement, boolean expectedResult) {
         boolean result = syntaxChecker.isValid(statement);
         assertEquals(expectedResult, result);
