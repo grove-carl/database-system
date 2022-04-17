@@ -88,4 +88,27 @@ class QueryExecutionEngineTest {
         assertEquals(0, database.getTables().size());
     }
 
+    @Test
+    void should_drop_table_when_execute_drop_table_statement_given_multiple_table_exist() {
+        String userTableName = "user";
+        String userIdColumnName = "id";
+        String userIdColumnType = "Integer";
+        List<ColumnDefinition> userTableColumnDefinitions = List.of(
+                ColumnDefinition.builder().columnName(userIdColumnName).columnType(userIdColumnType).build()
+        );
+        database.createTable(userTableName, userTableColumnDefinitions);
+
+        String adminTableName = "admin";
+        String adminNameColumnName = "name";
+        String adminNameColumnType = "String";
+        List<ColumnDefinition> adminTableColumnDefinitions = List.of(
+                ColumnDefinition.builder().columnName(adminNameColumnName).columnType(adminNameColumnType).build()
+        );
+        database.createTable(adminTableName, adminTableColumnDefinitions);
+
+        queryExecutionEngine.execute(userTableName);
+
+        assertEquals(1, database.getTables().size());
+    }
+
 }
