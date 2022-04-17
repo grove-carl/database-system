@@ -75,21 +75,45 @@ class QueryExecutionEngineTest {
     }
 
     @Test
-    void should_drop_table_when_execute_drop_table_statement_given_one_table_exist() {
-        String tableName = "user";
-        String columnName = "id";
-        String columnType = "Integer";
-        List<ColumnDefinition> columnDefinitions =
-                List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
-        database.createTable(tableName, columnDefinitions);
+    void should_create_table_when_execute_create_table_statement_given_execute_create_statement_twice() {
+        generateUserTable();
+        generateAdminTable();
 
-        queryExecutionEngine.execute(tableName);
+        assertEquals(2, database.getTables().size());
+
+        assertEquals("user", database.getTable("user").getName());
+        List<ColumnDefinition> expectedColumnDefinitionsOfUserTable = List.of(
+                ColumnDefinition.builder().columnName("id").columnType("Integer").build()
+        );
+        assertEquals(expectedColumnDefinitionsOfUserTable, database.getTable("user").getDefinitions());
+
+        assertEquals("admin", database.getTable("admin").getName());
+        List<ColumnDefinition> expectedColumnDefinitionsOfAdminTable = List.of(
+                ColumnDefinition.builder().columnName("name").columnType("String").build()
+        );
+        assertEquals(expectedColumnDefinitionsOfAdminTable, database.getTable("admin").getDefinitions());
+    }
+
+    @Test
+    void should_drop_table_when_execute_drop_table_statement_given_one_table_exist() {
+        generateUserTable();
+
+        queryExecutionEngine.execute("user");
 
         assertEquals(0, database.getTables().size());
     }
 
     @Test
     void should_drop_table_when_execute_drop_table_statement_given_multiple_table_exist() {
+        generateUserTable();
+        generateAdminTable();
+
+        queryExecutionEngine.execute("user");
+
+        assertEquals(1, database.getTables().size());
+    }
+
+    private void generateUserTable() {
         String userTableName = "user";
         String userIdColumnName = "id";
         String userIdColumnType = "Integer";
@@ -97,7 +121,9 @@ class QueryExecutionEngineTest {
                 ColumnDefinition.builder().columnName(userIdColumnName).columnType(userIdColumnType).build()
         );
         database.createTable(userTableName, userTableColumnDefinitions);
+    }
 
+    private void generateAdminTable() {
         String adminTableName = "admin";
         String adminNameColumnName = "name";
         String adminNameColumnType = "String";
@@ -105,10 +131,6 @@ class QueryExecutionEngineTest {
                 ColumnDefinition.builder().columnName(adminNameColumnName).columnType(adminNameColumnType).build()
         );
         database.createTable(adminTableName, adminTableColumnDefinitions);
-
-        queryExecutionEngine.execute(userTableName);
-
-        assertEquals(1, database.getTables().size());
     }
 
 }
