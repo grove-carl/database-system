@@ -2,7 +2,6 @@ package universe.util;
 
 import universe.ColumnDefinition;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import universe.exception.Error;
 import universe.exception.ErrorCollection;
@@ -24,6 +23,12 @@ public class CreateTableStatementUtils {
     public static List<ColumnDefinition> extractColumnDefinitionsFromCreateTableStatement(String statement) {
         String[] textualColumnDefinitions = extractTextualColumnDefinitionWithinParenthesis(statement);
         return mapTextualColumnDefinitionsToObjects(textualColumnDefinitions);
+    }
+
+    public static String extractTableNameFromDropTableStatement(String statement) {
+        int indexOfTailOfDropTableKeyWord = "drop table".length();
+        int indexOfStatementTerminator = statement.indexOf(";");
+        return statement.substring(indexOfTailOfDropTableKeyWord, indexOfStatementTerminator).trim();
     }
 
     private static String[] extractTextualColumnDefinitionWithinParenthesis(String statement) {

@@ -128,4 +128,12 @@ class SyntaxCheckerTest {
         assertDoesNotThrow(() -> syntaxChecker.check(statement));
     }
 
+    @Test
+    void should_throw_exception_1006_when_drop_table_given_specified_table_not_exists() {
+        String statement = "drop table user;";
+        String tableName = "user";
+        Error error = new Error(ErrorCollection.TABLE_NOT_EXIST, tableName);
+        assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
+    }
+
 }

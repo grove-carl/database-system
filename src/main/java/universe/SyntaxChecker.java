@@ -24,11 +24,24 @@ public class SyntaxChecker {
             List<ColumnDefinition> columnDefinitions =
                     CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
             checkValidationOfColumnDefinitions(columnDefinitions);
+        } else if (isDropTableStatement(statement)) {
+            String tableName = CreateTableStatementUtils.extractTableNameFromDropTableStatement(statement);
+            checkIsTableExist(tableName);
         }
     }
 
     private boolean isCreateTableStatement(String statement) {
         return statement.startsWith("create table");
+    }
+
+    private boolean isDropTableStatement(String statement) {
+        return statement.startsWith("drop table");
+    }
+
+    private void checkIsTableExist(String tableName) {
+        if (database.getTable(tableName) == null) {
+            throw new Error(ErrorCollection.TABLE_NOT_EXIST, tableName);
+        }
     }
 
     private void checkValidationOfTableName(String tableName) {

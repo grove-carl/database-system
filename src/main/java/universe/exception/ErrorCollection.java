@@ -10,7 +10,8 @@ public enum ErrorCollection {
     UNSUPPORTED_COLUMN_TYPE("1002", "column type is invalid"),
     DUPLICATE_TABLE_NAME("1003", "table `%s` has already exists"),
     DUPLICATE_COLUMN_NAME("1004", "duplicate column `%s`"),
-    EMPTY_COLUMN_DEFINITION("1005", "column definition should not be empty");
+    EMPTY_COLUMN_DEFINITION("1005", "column definition should not be empty"),
+    TABLE_NOT_EXIST("1006", "table `%s` is not exist");
 
     private final String code;
     private final String description;
