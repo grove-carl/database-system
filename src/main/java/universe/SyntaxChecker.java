@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import universe.config.ValidColumnTypes;
+import universe.exception.Error;
+import universe.exception.ErrorCollection;
 import universe.util.CreateTableStatementUtils;
 
 public class SyntaxChecker {
@@ -16,59 +18,61 @@ public class SyntaxChecker {
 
     public boolean isValid(String statement) {
         String tableName = CreateTableStatementUtils.extractTableNameFromCreateTableStatement(statement);
-        boolean isTableNameValid = checkValidationOfTableName(tableName);
+        checkValidationOfTableName(tableName);
 
         List<ColumnDefinition> columnDefinitions =
                 CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
-        boolean isColumnDefinitionsValid = checkValidationOfColumnDefinitions(columnDefinitions);
-
-        return isTableNameValid && isColumnDefinitionsValid;
+        checkValidationOfColumnDefinitions(columnDefinitions);
+        return true;
     }
 
-    private boolean checkValidationOfTableName(String tableName) {
-        return !isTableNameEmpty(tableName) && !isTableNameDuplicate(tableName);
+    private void checkValidationOfTableName(String tableName) {
+        checkIsTableNameEmpty(tableName);
+        checkIsTableNameDuplicate(tableName);
     }
 
-    private boolean isTableNameEmpty(String tableName) {
-        return tableName.isEmpty();
+    private void checkIsTableNameEmpty(String tableName) {
+        if (tableName.isEmpty()) {
+            throw new Error(ErrorCollection.MISSING_TABLE_NAME);
+        }
     }
 
-    private boolean isTableNameDuplicate(String tableName) {
-        return database.getTable(tableName) != null;
+    private void checkIsTableNameDuplicate(String tableName) {
+        if (database.getTable(tableName) != null) {
+            throw new Error(ErrorCollection.DUPLICATE_TABLE_NAME, tableName);
+        }
     }
 
-    private boolean checkValidationOfColumnDefinitions(List<ColumnDefinition> columnDefinitions) {
-        boolean isColumnDefinitionsEmpty = checkIsColumnDefinitionEmpty(columnDefinitions);
-        boolean isColumnNameDuplicated = checkColumnNameDuplication(columnDefinitions);
-        boolean isColumnTypeValid = checkColumnTypeValidation(columnDefinitions);
-
-        return !isColumnDefinitionsEmpty && !isColumnNameDuplicated && isColumnTypeValid;
+    private void checkValidationOfColumnDefinitions(List<ColumnDefinition> columnDefinitions) {
+        checkIsColumnDefinitionEmpty(columnDefinitions);
+        checkColumnNameDuplication(columnDefinitions);
+        checkColumnTypeValidation(columnDefinitions);
     }
 
-    private boolean checkIsColumnDefinitionEmpty(List<ColumnDefinition> columnDefinitions) {
-        return columnDefinitions.isEmpty();
+    private void checkIsColumnDefinitionEmpty(List<ColumnDefinition> columnDefinitions) {
+        if (columnDefinitions.isEmpty()) {
+            throw new Error(ErrorCollection.EMPTY_COLUMN_DEFINITION);
+        }
     }
 
-    private boolean checkColumnNameDuplication(final List<ColumnDefinition> columnDefinitions) {
+    private void checkColumnNameDuplication(final List<ColumnDefinition> columnDefinitions) {
         Set<String> columnNameSet = new HashSet<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             if (columnNameSet.contains(columnDefinition.getColumnName())) {
-                return true;
+                throw new Error(ErrorCollection.DUPLICATE_COLUMN_NAME, columnDefinition.getColumnName());
             } else {
                 columnNameSet.add(columnDefinition.getColumnName());
             }
         }
-        return false;
     }
 
-    private boolean checkColumnTypeValidation(final List<ColumnDefinition> columnDefinitions) {
+    private void checkColumnTypeValidation(final List<ColumnDefinition> columnDefinitions) {
         List<String> validColumnTypes = ValidColumnTypes.get();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             if (!validColumnTypes.contains(columnDefinition.getColumnType())) {
-                return false;
+                throw new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
             }
         }
-        return true;
     }
 
 }
