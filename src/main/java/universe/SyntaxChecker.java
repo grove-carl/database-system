@@ -16,14 +16,13 @@ public class SyntaxChecker {
         this.database = DatabaseFactory.getDatabase();
     }
 
-    public boolean isValid(String statement) {
+    public void check(String statement) {
         String tableName = CreateTableStatementUtils.extractTableNameFromCreateTableStatement(statement);
         checkValidationOfTableName(tableName);
 
         List<ColumnDefinition> columnDefinitions =
                 CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
         checkValidationOfColumnDefinitions(columnDefinitions);
-        return true;
     }
 
     private void checkValidationOfTableName(String tableName) {

@@ -1,7 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.ArrayList;
 import universe.Database;
 import universe.DatabaseFactory;
 import universe.QueryExecutionEngine;
