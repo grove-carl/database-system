@@ -17,12 +17,18 @@ public class SyntaxChecker {
     }
 
     public void check(String statement) {
-        String tableName = CreateTableStatementUtils.extractTableNameFromCreateTableStatement(statement);
-        checkValidationOfTableName(tableName);
+        if (isCreateTableStatement(statement)) {
+            String tableName = CreateTableStatementUtils.extractTableNameFromCreateTableStatement(statement);
+            checkValidationOfTableName(tableName);
 
-        List<ColumnDefinition> columnDefinitions =
-                CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
-        checkValidationOfColumnDefinitions(columnDefinitions);
+            List<ColumnDefinition> columnDefinitions =
+                    CreateTableStatementUtils.extractColumnDefinitionsFromCreateTableStatement(statement);
+            checkValidationOfColumnDefinitions(columnDefinitions);
+        }
+    }
+
+    private boolean isCreateTableStatement(String statement) {
+        return statement.startsWith("create table");
     }
 
     private void checkValidationOfTableName(String tableName) {

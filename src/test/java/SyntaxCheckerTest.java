@@ -116,4 +116,16 @@ class SyntaxCheckerTest {
         assertThrows(RuntimeException.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
+    @Test
+    void should_not_throw_exception_when_drop_table_given_specified_table_exists() {
+        String tableName = "user";
+        List<ColumnDefinition> columnDefinitions =
+                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+        Database database = DatabaseFactory.getDatabase();
+        database.createTable(tableName, columnDefinitions);
+
+        String statement = "drop table user;";
+        assertDoesNotThrow(() -> syntaxChecker.check(statement));
+    }
+
 }
