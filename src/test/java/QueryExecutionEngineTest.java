@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.BeforeEach;
 import universe.Database;
 import universe.DatabaseFactory;
 import universe.QueryExecutionEngine;
@@ -11,7 +12,14 @@ import universe.ColumnDefinition;
 
 class QueryExecutionEngineTest {
 
+    private QueryExecutionEngine queryExecutionEngine;
+
     private final Database database;
+
+    @BeforeEach
+    public void setUp() {
+        queryExecutionEngine = new QueryExecutionEngine();
+    }
 
     public QueryExecutionEngineTest() {
         this.database = DatabaseFactory.getDatabase();
@@ -25,7 +33,6 @@ class QueryExecutionEngineTest {
         List<ColumnDefinition> columnDefinitions =
                 List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
 
-        QueryExecutionEngine queryExecutionEngine = new QueryExecutionEngine();
         queryExecutionEngine.execute(tableName, columnDefinitions);
 
         Table userTable = database.getTable("user");
@@ -46,7 +53,6 @@ class QueryExecutionEngineTest {
                 List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
         database.createTable(tableName, columnDefinitions);
 
-        QueryExecutionEngine queryExecutionEngine = new QueryExecutionEngine();
         queryExecutionEngine.execute(tableName);
 
         assertEquals(0, database.getTables().size());
