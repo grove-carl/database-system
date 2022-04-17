@@ -37,4 +37,19 @@ class QueryExecutionEngineTest {
         assertEquals("Integer", actualColumnDefinitions.get(0).getColumnType());
     }
 
+    @Test
+    void should_drop_table_when_execute_drop_table_statement_given_one_table_exist() {
+        String tableName = "user";
+        String columnName = "id";
+        String columnType = "Integer";
+        List<ColumnDefinition> columnDefinitions =
+                List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
+        database.createTable(tableName, columnDefinitions);
+
+        QueryExecutionEngine queryExecutionEngine = new QueryExecutionEngine();
+        queryExecutionEngine.execute(tableName);
+
+        assertEquals(0, database.getTables().size());
+    }
+
 }

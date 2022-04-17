@@ -25,7 +25,7 @@ class SyntaxCheckerTest {
 
     @AfterEach
     void tearDown() {
-        database.deleteAllTables();
+        database.dropAllTables();
     }
 
     @Test

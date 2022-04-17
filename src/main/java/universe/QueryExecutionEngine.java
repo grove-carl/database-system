@@ -13,4 +13,8 @@ public class QueryExecutionEngine {
     public void execute(String tableName, List<ColumnDefinition> columnDefinitions) {
         database.createTable(tableName, columnDefinitions);
     }
+
+    public void execute(String tableName) {
+        database.dropTable(tableName);
+    }
 }

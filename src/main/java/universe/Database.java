@@ -23,7 +23,11 @@ public class Database {
         tables.put(tableName, table);
     }
 
-    public void deleteAllTables() {
+    public void dropTable(String tableName) {
+        tables.remove(tableName);
+    }
+
+    public void dropAllTables() {
         tables.clear();
     }
 
