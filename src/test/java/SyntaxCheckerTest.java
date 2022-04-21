@@ -136,4 +136,17 @@ class SyntaxCheckerTest {
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
+    @Test
+    void should_not_throw_exception_when_alter_table_given_provide_single_column_name_and_type_is_provided() {
+        String tableName = "user";
+        List<ColumnDefinition> columnDefinitions =
+                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+        Database database = DatabaseFactory.getDatabase();
+        database.createTable(tableName, columnDefinitions);
+
+        String statement = "alter table user add column username String";
+
+        assertDoesNotThrow(() -> syntaxChecker.check(statement));
+    }
+
 }
