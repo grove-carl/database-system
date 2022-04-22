@@ -27,6 +27,9 @@ public class SyntaxChecker {
         } else if (isDropTableStatement(statement)) {
             String tableName = CreateTableStatementUtils.extractTableNameFromDropTableStatement(statement);
             checkIsTableExist(tableName);
+        } else if (isAlterTableStatement(statement)) {
+            String tableName = CreateTableStatementUtils.extractTableNameFromAlterTableStatement(statement);
+            checkIsTableNameEmpty(tableName);
         }
     }
 
@@ -36,6 +39,10 @@ public class SyntaxChecker {
 
     private boolean isDropTableStatement(String statement) {
         return statement.startsWith("drop table");
+    }
+
+    private boolean isAlterTableStatement(String statement) {
+        return statement.startsWith("alter table");
     }
 
     private void checkIsTableExist(String tableName) {

@@ -13,6 +13,10 @@ public class CreateTableStatementUtils {
     private static final String COLUMN_PARAMS_SPLIT = " ";
     private static final String COLUMN_DEFINITION_SPLIT = ",";
     private static final String CREATE_TABLE_KEYWORD = "create table";
+    private static final String DROP_TABLE_KEYWORD = "drop table";
+    private static final String ALTER_TABLE_KEYWORD = "alter table";
+    private static final String ADD_COLUMN_KEYWORD = "add column";
+    private static final int WORD_COUNT_OF_COLUMN_DEFINITION = 2;
 
     public static String extractTableNameFromCreateTableStatement(String statement) {
         int indexOfTailOfCreateTableStatement = CREATE_TABLE_KEYWORD.length();
@@ -26,9 +30,16 @@ public class CreateTableStatementUtils {
     }
 
     public static String extractTableNameFromDropTableStatement(String statement) {
-        int indexOfTailOfDropTableKeyWord = "drop table".length();
+        int indexOfTailOfDropTableKeyword = DROP_TABLE_KEYWORD.length();
         int indexOfStatementTerminator = statement.indexOf(";");
-        return statement.substring(indexOfTailOfDropTableKeyWord, indexOfStatementTerminator).trim();
+        return statement.substring(indexOfTailOfDropTableKeyword, indexOfStatementTerminator).trim();
+    }
+
+    public static String extractTableNameFromAlterTableStatement(String statement) {
+        int indexOfTailOfAlterTableKeyword = ALTER_TABLE_KEYWORD.length();
+        int indexOfHeadOfAddColumnKeyword = statement.indexOf(ADD_COLUMN_KEYWORD);
+
+        return statement.substring(indexOfTailOfAlterTableKeyword, indexOfHeadOfAddColumnKeyword).trim();
     }
 
     private static String[] extractTextualColumnDefinitionWithinParenthesis(String statement) {
@@ -53,6 +64,6 @@ public class CreateTableStatementUtils {
     }
 
     private static boolean columnDefinitionIsNotValid(String[] columnDefinition) {
-        return columnDefinition.length != 2;
+        return columnDefinition.length != WORD_COUNT_OF_COLUMN_DEFINITION;
     }
 }

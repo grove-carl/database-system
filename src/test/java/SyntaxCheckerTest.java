@@ -137,7 +137,7 @@ class SyntaxCheckerTest {
     }
 
     @Test
-    void should_not_throw_exception_when_alter_table_given_provide_single_column_name_and_type_is_provided() {
+    void should_not_throw_exception_when_alter_table_given_statement_syntax_is_correct() {
         String tableName = "user";
         List<ColumnDefinition> columnDefinitions =
                 List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
@@ -147,6 +147,20 @@ class SyntaxCheckerTest {
         String statement = "alter table user add column username String";
 
         assertDoesNotThrow(() -> syntaxChecker.check(statement));
+    }
+
+    @Test
+    void should_throw_exception_when_alter_table_given_alter_type_is_add_column_and_table_name_is_missing() {
+        String tableName = "user";
+        List<ColumnDefinition> columnDefinitions =
+                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+        Database database = DatabaseFactory.getDatabase();
+        database.createTable(tableName, columnDefinitions);
+
+        String statement = "alter table add column username String";
+
+        Error error = new Error(ErrorCollection.MISSING_TABLE_NAME, tableName);
+        assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
 }
