@@ -27,13 +27,7 @@ class QueryExecutionEngineTest {
 
     @Test
     void should_create_table_when_execute_create_table_statement_given_single_column_is_defined() {
-        String tableName = "user";
-        String columnName = "id";
-        String columnType = "integer";
-        List<ColumnDefinition> columnDefinitions =
-                List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
-
-        queryExecutionEngine.execute(tableName, columnDefinitions);
+        generateUserTable();
 
         Table userTable = database.getTable("user");
         assertNotNull(userTable);
