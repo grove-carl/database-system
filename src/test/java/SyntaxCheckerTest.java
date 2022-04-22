@@ -56,7 +56,7 @@ class SyntaxCheckerTest {
     }
 
     @Test
-    void should_return_true_when_create_table_given_multiple_columns_are_inputted() {
+    void should_not_throw_exception_when_create_table_given_multiple_columns_are_inputted() {
         String statement = "create table user (id integer, username string, password string);";
         assertDoesNotThrow(() -> syntaxChecker.check(statement));
     }
@@ -150,7 +150,7 @@ class SyntaxCheckerTest {
     }
 
     @Test
-    void should_throw_exception_when_alter_table_given_alter_type_is_add_column_and_table_name_is_missing() {
+    void should_throw_exception_1001_when_alter_table_given_alter_type_is_add_column_and_table_name_is_missing() {
         String tableName = "user";
         List<ColumnDefinition> columnDefinitions =
                 List.of(ColumnDefinition.builder().columnName("id").columnType("integer").build());
