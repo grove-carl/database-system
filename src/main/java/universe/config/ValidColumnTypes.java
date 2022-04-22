@@ -5,6 +5,6 @@ import java.util.List;
 public class ValidColumnTypes {
 
     public static List<String> get() {
-        return List.of("Integer", "String");
+        return List.of("integer", "string");
     }
 }

@@ -29,7 +29,7 @@ class QueryExecutionEngineTest {
     void should_create_table_when_execute_create_table_statement_given_single_column_is_defined() {
         String tableName = "user";
         String columnName = "id";
-        String columnType = "Integer";
+        String columnType = "integer";
         List<ColumnDefinition> columnDefinitions =
                 List.of(ColumnDefinition.builder().columnName(columnName).columnType(columnType).build());
 
@@ -41,18 +41,18 @@ class QueryExecutionEngineTest {
         List<ColumnDefinition> actualColumnDefinitions = userTable.getDefinitions();
         assertEquals(1, actualColumnDefinitions.size());
         assertEquals("id", actualColumnDefinitions.get(0).getColumnName());
-        assertEquals("Integer", actualColumnDefinitions.get(0).getColumnType());
+        assertEquals("integer", actualColumnDefinitions.get(0).getColumnType());
     }
 
     @Test
     void should_create_table_when_execute_create_table_statement_given_multiple_columns_are_defined() {
         String tableName = "user";
         String idColumnName = "id";
-        String idColumnType = "Integer";
+        String idColumnType = "integer";
         String usernameColumnName = "username";
-        String usernameColumnType = "String";
+        String usernameColumnType = "string";
         String passwordColumnName = "password";
-        String passwordColumnType = "String";
+        String passwordColumnType = "string";
         List<ColumnDefinition> columnDefinitions = List.of(
                 ColumnDefinition.builder().columnName(idColumnName).columnType(idColumnType).build(),
                 ColumnDefinition.builder().columnName(usernameColumnName).columnType(usernameColumnType).build(),
@@ -83,13 +83,13 @@ class QueryExecutionEngineTest {
 
         assertEquals("user", database.getTable("user").getName());
         List<ColumnDefinition> expectedColumnDefinitionsOfUserTable = List.of(
-                ColumnDefinition.builder().columnName("id").columnType("Integer").build()
+                ColumnDefinition.builder().columnName("id").columnType("integer").build()
         );
         assertEquals(expectedColumnDefinitionsOfUserTable, database.getTable("user").getDefinitions());
 
         assertEquals("admin", database.getTable("admin").getName());
         List<ColumnDefinition> expectedColumnDefinitionsOfAdminTable = List.of(
-                ColumnDefinition.builder().columnName("name").columnType("String").build()
+                ColumnDefinition.builder().columnName("name").columnType("string").build()
         );
         assertEquals(expectedColumnDefinitionsOfAdminTable, database.getTable("admin").getDefinitions());
     }
@@ -116,7 +116,7 @@ class QueryExecutionEngineTest {
     private void generateUserTable() {
         String userTableName = "user";
         String userIdColumnName = "id";
-        String userIdColumnType = "Integer";
+        String userIdColumnType = "integer";
         List<ColumnDefinition> userTableColumnDefinitions = List.of(
                 ColumnDefinition.builder().columnName(userIdColumnName).columnType(userIdColumnType).build()
         );
@@ -126,7 +126,7 @@ class QueryExecutionEngineTest {
     private void generateAdminTable() {
         String adminTableName = "admin";
         String adminNameColumnName = "name";
-        String adminNameColumnType = "String";
+        String adminNameColumnType = "string";
         List<ColumnDefinition> adminTableColumnDefinitions = List.of(
                 ColumnDefinition.builder().columnName(adminNameColumnName).columnType(adminNameColumnType).build()
         );

@@ -30,13 +30,13 @@ class SyntaxCheckerTest {
 
     @Test
     void should_not_throw_exception_when_create_table_given_one_column_with_column_name_and_data_type() {
-        String statement = "create table user (id Integer);";
+        String statement = "create table user (id integer);";
         assertDoesNotThrow(() -> syntaxChecker.check(statement));
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_column_name_is_missing() {
-        String statement = "create table user (Integer);";
+        String statement = "create table user (integer);";
         Error error = new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
@@ -50,41 +50,41 @@ class SyntaxCheckerTest {
 
     @Test
     void should_throw_exception_1001_when_create_table_given_table_name_is_missing() {
-        String statement = "create table (id Integer);";
+        String statement = "create table (id integer);";
         Error error = new Error(ErrorCollection.MISSING_TABLE_NAME);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
     @Test
     void should_return_true_when_create_table_given_multiple_columns_are_inputted() {
-        String statement = "create table user (id Integer, username String, password String);";
+        String statement = "create table user (id integer, username string, password string);";
         assertDoesNotThrow(() -> syntaxChecker.check(statement));
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_multiple_columns_are_inputted_and_first_column_name_is_missing() {
-        String statement = "create table user (Integer, username String, password String);";
+        String statement = "create table user (integer, username string, password string);";
         Error error = new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_multiple_columns_are_inputted_and_first_column_definition_is_missing() {
-        String statement = "create table user (id, username String, password String);";
+        String statement = "create table user (id, username string, password string);";
         Error error = new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_multiple_columns_are_inputted_and_multiple_column_name_or_definition_is_missing() {
-        String statement = "create table user (id, username String, String);";
+        String statement = "create table user (id, username string, string);";
         Error error = new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_column_type_is_not_valid() {
-        String statement = "create table user (id Integer, username Str);";
+        String statement = "create table user (id integer, username str);";
         Error error = new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
@@ -93,18 +93,18 @@ class SyntaxCheckerTest {
     void should_throw_exception_1003_when_create_table_given_table_name_has_already_exist() {
         String tableName = "user";
         List<ColumnDefinition> columnDefinitions =
-                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+                List.of(ColumnDefinition.builder().columnName("id").columnType("integer").build());
         Database database = DatabaseFactory.getDatabase();
         database.createTable(tableName, columnDefinitions);
 
-        String statement = "create table user (id Integer);";
+        String statement = "create table user (id integer);";
         Error error = new Error(ErrorCollection.DUPLICATE_TABLE_NAME, tableName);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
     @Test
     void should_throw_exception_1004_when_create_table_given_column_name_has_already_exist() {
-        String statement = "create table user (id Integer, username String, username String);";
+        String statement = "create table user (id integer, username string, username string);";
         Error error = new Error(ErrorCollection.DUPLICATE_COLUMN_NAME, "username");
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
@@ -120,7 +120,7 @@ class SyntaxCheckerTest {
     void should_not_throw_exception_when_drop_table_given_specified_table_exists() {
         String tableName = "user";
         List<ColumnDefinition> columnDefinitions =
-                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+                List.of(ColumnDefinition.builder().columnName("id").columnType("integer").build());
         Database database = DatabaseFactory.getDatabase();
         database.createTable(tableName, columnDefinitions);
 
@@ -140,11 +140,11 @@ class SyntaxCheckerTest {
     void should_not_throw_exception_when_alter_table_given_statement_syntax_is_correct() {
         String tableName = "user";
         List<ColumnDefinition> columnDefinitions =
-                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+                List.of(ColumnDefinition.builder().columnName("id").columnType("integer").build());
         Database database = DatabaseFactory.getDatabase();
         database.createTable(tableName, columnDefinitions);
 
-        String statement = "alter table user add column username String";
+        String statement = "alter table user add column username string";
 
         assertDoesNotThrow(() -> syntaxChecker.check(statement));
     }
@@ -153,11 +153,11 @@ class SyntaxCheckerTest {
     void should_throw_exception_when_alter_table_given_alter_type_is_add_column_and_table_name_is_missing() {
         String tableName = "user";
         List<ColumnDefinition> columnDefinitions =
-                List.of(ColumnDefinition.builder().columnName("id").columnType("Integer").build());
+                List.of(ColumnDefinition.builder().columnName("id").columnType("integer").build());
         Database database = DatabaseFactory.getDatabase();
         database.createTable(tableName, columnDefinitions);
 
-        String statement = "alter table add column username String";
+        String statement = "alter table add column username string";
 
         Error error = new Error(ErrorCollection.MISSING_TABLE_NAME, tableName);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
