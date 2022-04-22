@@ -30,6 +30,8 @@ public class SyntaxChecker {
         } else if (isAlterTableStatement(statement)) {
             String tableName = CreateTableStatementUtils.extractTableNameFromAlterTableStatement(statement);
             checkIsTableNameEmpty(tableName);
+        } else {
+            throw new Error(ErrorCollection.UNSUPPORTED_OPERATION);
         }
     }
 

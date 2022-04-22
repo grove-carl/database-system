@@ -163,4 +163,12 @@ class SyntaxCheckerTest {
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }
 
+    @Test
+    void should_throw_exception_1007_when_check_statement_given_command_not_supported() {
+        String statement = "modify table";
+
+        Error error = new Error(ErrorCollection.UNSUPPORTED_OPERATION);
+        assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
+    }
+
 }
