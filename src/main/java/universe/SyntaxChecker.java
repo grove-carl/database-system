@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import universe.config.ValidColumnTypes;
 import universe.exception.Error;
-import universe.exception.ErrorCollection;
+import universe.exception.ErrorType;
 import universe.util.CreateTableStatementUtils;
 
 public class SyntaxChecker {
@@ -31,7 +31,7 @@ public class SyntaxChecker {
             String tableName = CreateTableStatementUtils.extractTableNameFromAlterTableStatement(statement);
             checkIsTableNameEmpty(tableName);
         } else {
-            throw new Error(ErrorCollection.UNSUPPORTED_OPERATION);
+            throw new Error(ErrorType.UNSUPPORTED_OPERATION);
         }
     }
 
@@ -49,7 +49,7 @@ public class SyntaxChecker {
 
     private void checkIsTableExist(String tableName) {
         if (database.getTable(tableName) == null) {
-            throw new Error(ErrorCollection.TABLE_NOT_EXIST, tableName);
+            throw new Error(ErrorType.TABLE_NOT_EXIST, tableName);
         }
     }
 
@@ -60,13 +60,13 @@ public class SyntaxChecker {
 
     private void checkIsTableNameEmpty(String tableName) {
         if (tableName.isEmpty()) {
-            throw new Error(ErrorCollection.MISSING_TABLE_NAME);
+            throw new Error(ErrorType.MISSING_TABLE_NAME);
         }
     }
 
     private void checkIsTableNameDuplicate(String tableName) {
         if (database.getTable(tableName) != null) {
-            throw new Error(ErrorCollection.DUPLICATE_TABLE_NAME, tableName);
+            throw new Error(ErrorType.DUPLICATE_TABLE_NAME, tableName);
         }
     }
 
@@ -78,7 +78,7 @@ public class SyntaxChecker {
 
     private void checkIsColumnDefinitionEmpty(List<ColumnDefinition> columnDefinitions) {
         if (columnDefinitions.isEmpty()) {
-            throw new Error(ErrorCollection.EMPTY_COLUMN_DEFINITION);
+            throw new Error(ErrorType.EMPTY_COLUMN_DEFINITION);
         }
     }
 
@@ -86,7 +86,7 @@ public class SyntaxChecker {
         Set<String> columnNameSet = new HashSet<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             if (columnNameSet.contains(columnDefinition.getColumnName())) {
-                throw new Error(ErrorCollection.DUPLICATE_COLUMN_NAME, columnDefinition.getColumnName());
+                throw new Error(ErrorType.DUPLICATE_COLUMN_NAME, columnDefinition.getColumnName());
             } else {
                 columnNameSet.add(columnDefinition.getColumnName());
             }
@@ -97,7 +97,7 @@ public class SyntaxChecker {
         List<String> validColumnTypes = ValidColumnTypes.get();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             if (!validColumnTypes.contains(columnDefinition.getColumnType())) {
-                throw new Error(ErrorCollection.UNSUPPORTED_COLUMN_TYPE);
+                throw new Error(ErrorType.UNSUPPORTED_COLUMN_TYPE);
             }
         }
     }

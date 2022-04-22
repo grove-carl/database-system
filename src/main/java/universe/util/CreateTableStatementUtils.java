@@ -4,7 +4,7 @@ import universe.ColumnDefinition;
 import java.util.ArrayList;
 import java.util.List;
 import universe.exception.Error;
-import universe.exception.ErrorCollection;
+import universe.exception.ErrorType;
 
 public class CreateTableStatementUtils {
 
@@ -54,7 +54,7 @@ public class CreateTableStatementUtils {
         for (String originColumnDefinition : textualColumnDefinitions) {
             String[] singleColumnDefinition = originColumnDefinition.trim().split(COLUMN_PARAMS_SPLIT);
             if (columnDefinitionIsNotValid(singleColumnDefinition)) {
-                throw new Error(ErrorCollection.MISSING_COLUMN_DEFINITION_PARAMS);
+                throw new Error(ErrorType.MISSING_COLUMN_DEFINITION_PARAMS);
             }
             columnDefinitions.add(ColumnDefinition.builder()
                     .columnName(singleColumnDefinition[0])

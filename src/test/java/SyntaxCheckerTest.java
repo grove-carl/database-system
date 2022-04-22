@@ -10,7 +10,7 @@ import universe.SyntaxChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import universe.exception.Error;
-import universe.exception.ErrorCollection;
+import universe.exception.ErrorType;
 
 class SyntaxCheckerTest {
 
@@ -38,21 +38,21 @@ class SyntaxCheckerTest {
     void should_throw_exception_1002_when_create_table_given_column_name_is_missing() {
         String statement = "create table user (integer);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_column_type_is_missing() {
         String statement = "create table user (id);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
     @Test
     void should_throw_exception_1001_when_create_table_given_table_name_is_missing() {
         String statement = "create table (id integer);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.MISSING_TABLE_NAME, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.MISSING_TABLE_NAME, statement);
     }
 
     @Test
@@ -65,28 +65,28 @@ class SyntaxCheckerTest {
     void should_throw_exception_1002_when_create_table_given_multiple_columns_are_inputted_and_first_column_name_is_missing() {
         String statement = "create table user (integer, username string, password string);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_multiple_columns_are_inputted_and_first_column_definition_is_missing() {
         String statement = "create table user (id, username string, password string);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_multiple_columns_are_inputted_and_multiple_column_name_or_definition_is_missing() {
         String statement = "create table user (id, username string, string);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
     @Test
     void should_throw_exception_1002_when_create_table_given_column_type_is_not_valid() {
         String statement = "create table user (id integer, username str);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
     @Test
@@ -95,21 +95,21 @@ class SyntaxCheckerTest {
 
         String statement = "create table user (id integer);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.DUPLICATE_TABLE_NAME, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.DUPLICATE_TABLE_NAME, statement);
     }
 
     @Test
     void should_throw_exception_1004_when_create_table_given_column_name_has_already_exist() {
         String statement = "create table user (id integer, username string, username string);";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.DUPLICATE_COLUMN_NAME, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.DUPLICATE_COLUMN_NAME, statement);
     }
 
     @Test
     void should_throw_exception_1005_when_create_table_given_column_definitions_are_empty() {
         String statement = "create table user ();";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.EMPTY_COLUMN_DEFINITION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.EMPTY_COLUMN_DEFINITION, statement);
     }
 
     @Test
@@ -126,7 +126,7 @@ class SyntaxCheckerTest {
         String statement = "drop table user;";
         String tableName = "user";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.TABLE_NOT_EXIST, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.TABLE_NOT_EXIST, statement);
     }
 
     @Test
@@ -144,17 +144,17 @@ class SyntaxCheckerTest {
 
         String statement = "alter table add column username string";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.MISSING_TABLE_NAME, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.MISSING_TABLE_NAME, statement);
     }
 
     @Test
     void should_throw_exception_1007_when_check_statement_given_command_not_supported() {
         String statement = "modify table";
 
-        assertThrowErrorWhenCheckStatement(ErrorCollection.UNSUPPORTED_OPERATION, statement);
+        assertThrowErrorWhenCheckStatement(ErrorType.UNSUPPORTED_OPERATION, statement);
     }
 
-    private void assertThrowErrorWhenCheckStatement(ErrorCollection expectedError, String statement) {
+    private void assertThrowErrorWhenCheckStatement(ErrorType expectedError, String statement) {
         Error error = new Error(expectedError);
         assertThrows(Error.class, () -> syntaxChecker.check(statement), error.toString());
     }

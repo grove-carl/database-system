@@ -3,7 +3,7 @@ package universe.exception;
 import lombok.Getter;
 
 @Getter
-public enum ErrorCollection {
+public enum ErrorType {
 
     MISSING_COLUMN_DEFINITION_PARAMS("1000", "missing required column definition param"),
     MISSING_TABLE_NAME("1001", "table name is not provided"),
@@ -17,7 +17,7 @@ public enum ErrorCollection {
     private final String code;
     private final String description;
 
-    ErrorCollection(String code, String description) {
+    ErrorType(String code, String description) {
         this.code = code;
         this.description = description;
     }
