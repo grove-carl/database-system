@@ -71,15 +71,8 @@ public class SyntaxChecker {
     }
 
     private void checkValidationOfColumnDefinitions(List<ColumnDefinition> columnDefinitions) {
-        checkIsColumnDefinitionEmpty(columnDefinitions);
         checkColumnNameDuplication(columnDefinitions);
         checkColumnTypeValidation(columnDefinitions);
-    }
-
-    private void checkIsColumnDefinitionEmpty(List<ColumnDefinition> columnDefinitions) {
-        if (columnDefinitions.isEmpty()) {
-            throw new Error(ErrorType.EMPTY_COLUMN_DEFINITION);
-        }
     }
 
     private void checkColumnNameDuplication(final List<ColumnDefinition> columnDefinitions) {

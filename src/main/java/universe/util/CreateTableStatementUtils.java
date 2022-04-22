@@ -50,6 +50,7 @@ public class CreateTableStatementUtils {
     }
 
     private static List<ColumnDefinition> mapTextualColumnDefinitionsToObjects(String[] textualColumnDefinitions) {
+        checkIsColumnDefinitionEmpty(textualColumnDefinitions);
         List<ColumnDefinition> columnDefinitions = new ArrayList<>();
         for (String originColumnDefinition : textualColumnDefinitions) {
             String[] singleColumnDefinition = originColumnDefinition.trim().split(COLUMN_PARAMS_SPLIT);
@@ -61,6 +62,12 @@ public class CreateTableStatementUtils {
                     .columnType(singleColumnDefinition[1]).build());
         }
         return columnDefinitions;
+    }
+
+    private static void checkIsColumnDefinitionEmpty(String[] columnDefinitions) {
+        if (columnDefinitions.length == 1 && columnDefinitions[0].isEmpty()) {
+            throw new Error(ErrorType.EMPTY_COLUMN_DEFINITION);
+        }
     }
 
     private static boolean columnDefinitionIsNotValid(String[] columnDefinition) {
